@@ -1,0 +1,1 @@
+create sequence event_store_sequence_id start with (select max(id) + 1 from event_store);

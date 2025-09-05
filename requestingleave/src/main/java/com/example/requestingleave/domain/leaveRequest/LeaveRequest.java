@@ -1,0 +1,132 @@
+package com.example.requestingleave.domain.leaveRequest;
+
+import com.example.common.domain.Entity;
+import com.example.common.domain.FullName;
+import com.example.common.domain.Identity;
+import com.example.common.domain.LeavePeriod;
+import com.example.common.events.LeaveRequestCancelledEvent;
+import com.example.common.events.LeaveRequestStartedEvent;
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+
+public class LeaveRequest extends Entity {
+    private final String staffMemberID;
+    private final FullName fullNameOfStaff;
+    private LocalDate requestedOn;
+    private LeaveStatus leaveStatus;
+    private String statusDescription;
+    private final List<LeaveDay> leaveDays;
+
+    public LeaveRequest(Identity id,
+                        String staffMemberID,
+                        FullName fullNameOfStaff,
+                        List<LeaveDay> leaveDays) {
+        super(id);
+        assertArgumentNotEmpty(staffMemberID, "StaffMemberID cannot be empty");
+        this.staffMemberID = staffMemberID;
+        this.fullNameOfStaff = fullNameOfStaff;
+        this.leaveDays = leaveDays;
+        this.requestedOn = LocalDate.now();
+        this.leaveStatus = LeaveStatus.Pending;
+        this.statusDescription = Leave_Status_Description_Constants.PENDING;
+    }
+
+    public static LeaveRequest createWithEvent(Identity id,
+                                               String staffId,
+                                               FullName fullName,
+                                               LeavePeriod requestedPeriod) {
+        LeaveRequest request = new LeaveRequest(
+                id,
+                staffId,
+                fullName,
+                List.of(new LeaveDay(requestedPeriod))
+        );
+        request.addDomainEvent(new LeaveRequestStartedEvent(id, staffId, requestedPeriod));
+        return request;
+    }
+
+    public int totalDaysRequested() {
+        return leaveDays.stream()
+                .mapToInt(LeaveDay::numberOfDays)
+                .sum();
+    }
+
+    public Identity id() {
+        return id;
+    }
+
+    public String staffMemberID() {
+        return staffMemberID;
+    }
+
+    public FullName fullNameOfStaff() {
+        return fullNameOfStaff;
+    }
+
+    public LocalDate requestedOn() {
+        return requestedOn;
+    }
+
+    public LeaveStatus leaveStatus() {
+        return leaveStatus;
+    }
+
+    public String statusDescription() {
+        return statusDescription;
+    }
+
+    public List<LeaveDay> leaveDays() {
+        return Collections.unmodifiableList(leaveDays);
+    }
+
+    public void markAsApproved(Identity approverAggregateId) {
+        if (leaveStatus != LeaveStatus.Pending) {
+            throw new IllegalStateException("Cannot approve a request that is not pending");
+        }
+
+        this.leaveStatus = LeaveStatus.Approved;
+        this.statusDescription = Leave_Status_Description_Constants.APPROVED;
+
+        LeavePeriod approvedPeriod = leaveDays.get(0).toLeavePeriod(); // assuming single-period annual leave
+        this.addDomainEvent(new com.example.common.events.LeaveRequestApprovedEvent(
+                approverAggregateId,
+                this.staffMemberID,
+                "Annual",
+                approvedPeriod
+        ));
+    }
+
+    public void markAsRejected(Identity approverAggregateId) {
+        if (leaveStatus != LeaveStatus.Pending) {
+            throw new IllegalStateException("Cannot reject a request that is not pending");
+        }
+        this.leaveStatus = LeaveStatus.Rejected;
+        this.statusDescription = Leave_Status_Description_Constants.REJECTED;
+        this.addDomainEvent(new LeaveRequestCancelledEvent(this.id));
+    }
+
+    public void cancel() {
+        if (leaveStatus != LeaveStatus.Pending) {
+            throw new IllegalStateException("Cannot cancel a request that is not pending");
+        }
+        this.leaveStatus = LeaveStatus.Cancelled;
+        this.statusDescription = Leave_Status_Description_Constants.CANCELLED;
+        this.addDomainEvent(new LeaveRequestCancelledEvent(this.id));
+    }
+
+    public static LeaveRequest leaveRequestOf(Identity id,
+                                              String staffMemberID,
+                                              FullName fullNameOfStaff,
+                                              List<LeaveDay> leaveDays,
+                                              LocalDate requestedOn,
+                                              LeaveStatus leaveStatus,
+                                              String statusDescription) {
+        LeaveRequest request = new LeaveRequest(id, staffMemberID, fullNameOfStaff, leaveDays);
+        request.leaveStatus = leaveStatus;
+        request.statusDescription = statusDescription;
+        request.requestedOn = requestedOn;
+        return request;
+    }
+}
