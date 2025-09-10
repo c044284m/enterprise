@@ -28,7 +28,6 @@ public class ApprovingLeaveService {
                 approvalId,
                 event.getAggregateID().id(),
                 event.getStaffId(),
-                //event.getLeaveType(),
                 event.getRequestedPeriod()
         );
 

@@ -6,6 +6,8 @@ import com.example.common.events.LeaveRequestApprovedEvent;
 import com.example.common.events.LeaveRequestCancelledEvent;
 import com.example.requestingleave.application.events.DomainEventManager;
 import com.example.requestingleave.domain.leaveRequest.LeaveRequest;
+import com.example.requestingleave.domain.leaveRequest.LeaveStatus;
+import com.example.requestingleave.domain.leaveRequest.Leave_Status_Description_Constants;
 import com.example.requestingleave.infrastructure.leaveRequest.LeaveRequestJpa;
 import com.example.requestingleave.infrastructure.leaveRequest.LeaveRequestRepository;
 import com.example.requestingleave.ui.leaveRequest.SubmitLeaveRequestCommand;
@@ -31,14 +33,20 @@ public class RequestingLeaveService {
             Identity newRequestId = UniqueIDFactory.createID();
             LOG.info("New leave request ID is {}", newRequestId);
 
+            var leaveDays = LeaveDayMapper.toDomain(command.getLeaveDays());
+
+            // Construct aggregate with domain event
             LeaveRequest newRequest = LeaveRequest.createWithEvent(
                     newRequestId,
                     command.getStaffId(),
                     command.getFullName(),
-                    command.getRequestedPeriod()
+                    leaveDays,
+                    command.getRequestedOn()
             );
 
             leaveRequestRepository.save(LeaveRequestMapper.toJpa(newRequest));
+
+            // Notify subscribers
             domainEventManager.manageDomainEvents(this, newRequest.listOfDomainEvents());
         } catch (IllegalArgumentException e) {
             LOG.warn("Leave request submission failed: {}", e.getMessage());
@@ -46,7 +54,6 @@ public class RequestingLeaveService {
         }
     }
 
-    @Transactional
     public void cancelLeaveRequest(CancelLeaveRequestCommand command) throws RequestingLeaveDomainException {
         LeaveRequest requestToCancel = findRequestAndConvertToDomain(command.getRequestId());
         requestToCancel.cancel();

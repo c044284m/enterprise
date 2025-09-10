@@ -11,7 +11,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class LeaveEntitlementDTO {
-    private String leaveType;
     private int remainingDays;
     private LeavePeriod validPeriod;
     private String staffMemberId;

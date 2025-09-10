@@ -40,8 +40,7 @@ public class LeaveRequestJpa {
     @OneToMany(mappedBy = "leaveRequestId", cascade = CascadeType.ALL)
     private List<LeaveDayJpa> leaveDays;
 
-    public LeaveRequestJpa() {
-    }
+    public LeaveRequestJpa() {}
 
     protected LeaveRequestJpa(String id,
                               String staffMemberId,

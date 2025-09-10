@@ -36,7 +36,6 @@ public class StaffMapper {
         String staffId = entitlement.getStaff() != null ? entitlement.getStaff().getId() : null;
 
         return new LeaveEntitlementDTO(
-                entitlement.getLeaveType(),
                 entitlement.getRemainingDays(),
                 validPeriod,
                 staffId

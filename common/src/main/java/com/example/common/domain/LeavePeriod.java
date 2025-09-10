@@ -2,12 +2,12 @@ package com.example.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import lombok.Getter;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
 
-//@Getter
+@Getter
 @ToString
 public class LeavePeriod extends ValueObject {
     private final LocalDate startDate;

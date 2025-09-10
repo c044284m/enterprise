@@ -1,6 +1,7 @@
 package com.example.requestingleave.application.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -36,7 +37,7 @@ public class MQConfig {
     @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
         final var rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
         return rabbitTemplate;
     }
 
@@ -48,8 +49,9 @@ public class MQConfig {
     }
 
     @Bean
-    public MessageConverter jsonMessageConverter() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return new Jackson2JsonMessageConverter(objectMapper);
+    public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return new Jackson2JsonMessageConverter(mapper);
     }
 }

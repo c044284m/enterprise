@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Component
 @AllArgsConstructor
-public class DomainEventManager { //change name to DomainEventManager
+public class DomainEventManager {
     private Environment env;
     private RabbitTemplate sender;
 

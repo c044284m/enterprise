@@ -1,34 +1,38 @@
 package com.example.requestingleave.ui.leaveRequest;
 
 import com.example.common.domain.FullName;
-import com.example.common.domain.LeavePeriod;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import com.example.common.dto.LeaveDayDTO;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubmitLeaveRequestCommand {
-    private final String staffId;
-    private final FullName fullName;
-    private final LeavePeriod requestedPeriod;
+    private String staffId;
+    private FullName fullName;
+    private LocalDate requestedOn;
+    private List<LeaveDayDTO> leaveDays;
 
-    @JsonCreator
-    public SubmitLeaveRequestCommand(
-            @JsonProperty("staffId") String staffId,
-            @JsonProperty("fullName") FullName fullName,
-            @JsonProperty("requestedPeriod") LeavePeriod requestedPeriod) {
-        this.staffId = staffId;
-        this.fullName = fullName;
-        this.requestedPeriod = requestedPeriod;
-    }
+    @Override
+    public String toString() {
+        String leaveDaysAsString = leaveDays.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("\n"));
 
-    public String getStaffId() {
-        return staffId;
-    }
-
-    public FullName getFullName() {
-        return fullName;
-    }
-
-    public LeavePeriod getRequestedPeriod() {
-        return requestedPeriod;
+        return String.format(
+                "\nStaff: %s [%s], Requested On: %s, Requested Leave Days:\n[%s]",
+                staffId,
+                fullName,
+                requestedOn,
+                leaveDaysAsString
+        );
     }
 }

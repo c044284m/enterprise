@@ -1,5 +1,6 @@
 package com.example.requestingleave.application.leaveRequest.DTO;
 
+import com.example.common.dto.LeaveDayDTO;
 import com.example.common.domain.FullName;
 import com.example.requestingleave.domain.leaveRequest.LeaveStatus;
 import lombok.EqualsAndHashCode;
@@ -21,7 +22,7 @@ public class LeaveRequestDTO {
     private final LeaveStatus leaveStatus;
     private final String descriptionOfStatus;
 
-    private List<LeaveDayDTO> leaveDays = new ArrayList<>();
+    private final List<LeaveDayDTO> leaveDays;
 
     public LeaveRequestDTO(String id, String staffMemberId, FullName fullName,
                            LocalDate requestedOn, LeaveStatus leaveStatus, String descriptionOfStatus) {
@@ -31,6 +32,7 @@ public class LeaveRequestDTO {
         this.requestedOn = requestedOn;
         this.leaveStatus = leaveStatus;
         this.descriptionOfStatus = descriptionOfStatus;
+        this.leaveDays = new ArrayList<>();
     }
 
     public void addLeaveDays(List<LeaveDayDTO> days) {
