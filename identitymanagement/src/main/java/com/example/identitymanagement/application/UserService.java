@@ -1,10 +1,10 @@
 package com.example.identitymanagement.application;
 
+import com.example.common.security.AppUser;
+import com.example.common.security.JwtTokenUtil;
 import com.example.identitymanagement.infrastructure.UserRepository;
 import com.example.identitymanagement.security.SecurityProperties;
 import com.example.identitymanagement.ui.UserDetailsRequest;
-import example.common.security.AppUser;
-import example.common.security.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
-@ComponentScan(basePackages = {"example.common.security"})  //needed to locate JwtTokenUtil
-@EntityScan(basePackages = {"example.common.security"})     //needed to locate AppUser
+@ComponentScan(basePackages = {"com.example.common.security"})  //needed to locate JwtTokenUtil
+@EntityScan(basePackages = {"com.example.common.security"})     //needed to locate AppUser
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;

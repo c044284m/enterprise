@@ -1,8 +1,8 @@
 package com.example.identitymanagement.ui;
 
 import com.example.identitymanagement.application.UserService;
-import example.common.security.*;
-import example.common.ui.CommonController;
+import com.example.common.security.*;
+import com.example.common.ui.CommonController;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
