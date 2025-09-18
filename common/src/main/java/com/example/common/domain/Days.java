@@ -1,7 +1,10 @@
 package com.example.common.domain;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public class Days extends ValueObject {
     private int value;
 

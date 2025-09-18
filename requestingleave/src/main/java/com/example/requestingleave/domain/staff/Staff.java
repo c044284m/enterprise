@@ -5,6 +5,7 @@ import com.example.common.domain.FullName;
 import com.example.common.domain.Identity;
 import com.example.common.domain.EmailAddress;
 import com.example.common.domain.Department;
+import com.example.requestingleave.domain.events.StaffAddedEvent;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -29,6 +30,26 @@ public class Staff extends Entity {
     // Factory method for testing
     public static Staff staffOf(Identity id, FullName fullName, EmailAddress emailAddress, Department department) {
         return new Staff(id, fullName, emailAddress, department);
+    }
+
+    // Used for event generation
+    public static Staff staffOfWithEvent(Identity id,
+                                         FullName fullName,
+                                         EmailAddress emailAddress,
+                                         Department department,
+                                         List<LeaveEntitlement> entitlements) {
+        Staff newStaff = new Staff(id, fullName, emailAddress, department);
+        entitlements.forEach(newStaff::addOrUpdateLeaveEntitlement);
+
+        // Only passing id and name as an event (at the moment)
+        newStaff.addDomainEvent(new StaffAddedEvent(
+                newStaff.id().id(),
+                fullName.toString(),
+                emailAddress.toString(),
+                department.name()
+        ));
+
+        return newStaff;
     }
 
     // Domain accessors

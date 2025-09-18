@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
-@ComponentScan(basePackages = {"example.common.security"})  //needed to locate RateLimiterService
+@ComponentScan(basePackages = {"com.example.common.security"})  //needed to locate RateLimiterService
 @RestController
 public class IdentityController extends CommonController {
     private UserService userService;

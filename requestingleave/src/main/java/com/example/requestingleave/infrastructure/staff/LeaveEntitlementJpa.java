@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @ToString
-public class LeaveEntitlementJpaValueObject {
+public class LeaveEntitlementJpa {
 
     @Id
     @Column(name = "id")
@@ -35,13 +35,13 @@ public class LeaveEntitlementJpaValueObject {
     @JoinColumn(name = "staff_member_id", referencedColumnName = "id")
     private StaffJpa staff;
 
-    public LeaveEntitlementJpaValueObject() {}
+    public LeaveEntitlementJpa() {}
 
-    public LeaveEntitlementJpaValueObject(long id,
-                                          int remainingDays,
-                                          LocalDate validFrom,
-                                          LocalDate validTo,
-                                          StaffJpa staff) {
+    public LeaveEntitlementJpa(long id,
+                               int remainingDays,
+                               LocalDate validFrom,
+                               LocalDate validTo,
+                               StaffJpa staff) {
         this.id = id;
         this.remainingDays = remainingDays;
         this.validFrom = validFrom;

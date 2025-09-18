@@ -1,5 +1,6 @@
 package com.example.requestingleave.ui.leaveRequest;
 
+import com.example.common.ui.CommonController;
 import com.example.requestingleave.application.leaveRequest.DTO.LeaveRequestDTO;
 import com.example.requestingleave.application.leaveRequest.LeaveRequestQueryHandler;
 import com.example.requestingleave.application.leaveRequest.RequestingLeaveService;
@@ -12,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 @AllArgsConstructor
 @RequestMapping("/leaveRequests")
 @RestController
-public class LeaveRequestController {
+public class LeaveRequestController extends CommonController {
     private final LeaveRequestQueryHandler queryHandler;
     private final RequestingLeaveService requestingLeaveService;
 

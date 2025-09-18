@@ -31,7 +31,7 @@ public class StaffJpa {
     private String departmentName;
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
-    private List<LeaveEntitlementJpaValueObject> leaveEntitlements;
+    private List<LeaveEntitlementJpa> leaveEntitlements;
 
     public StaffJpa() {}
 
@@ -55,5 +55,10 @@ public class StaffJpa {
                                             String emailAddress,
                                             String departmentName) {
         return new StaffJpa(id, fullnameFirstname, fullnameSurname, emailAddress, departmentName);
+    }
+
+    public void addLeaveEntitlement(LeaveEntitlementJpa leaveEntitlementJpa) {
+        leaveEntitlementJpa.setStaff(this);
+        leaveEntitlements.add(leaveEntitlementJpa);
     }
 }

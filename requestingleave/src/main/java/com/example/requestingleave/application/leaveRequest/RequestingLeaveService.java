@@ -6,8 +6,6 @@ import com.example.common.events.LeaveRequestApprovedEvent;
 import com.example.common.events.LeaveRequestCancelledEvent;
 import com.example.requestingleave.application.events.DomainEventManager;
 import com.example.requestingleave.domain.leaveRequest.LeaveRequest;
-import com.example.requestingleave.domain.leaveRequest.LeaveStatus;
-import com.example.requestingleave.domain.leaveRequest.Leave_Status_Description_Constants;
 import com.example.requestingleave.infrastructure.leaveRequest.LeaveRequestJpa;
 import com.example.requestingleave.infrastructure.leaveRequest.LeaveRequestRepository;
 import com.example.requestingleave.ui.leaveRequest.SubmitLeaveRequestCommand;

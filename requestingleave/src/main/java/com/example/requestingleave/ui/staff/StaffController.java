@@ -1,8 +1,12 @@
 package com.example.requestingleave.ui.staff;
 
+import com.example.common.ui.CommonController;
+import com.example.requestingleave.application.events.StaffApplicationService;
+import com.example.requestingleave.application.staff.StaffDomainException;
 import com.example.requestingleave.application.staff.StaffQueryHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -12,8 +16,9 @@ import java.util.Optional;
 @RequestMapping("/staff")
 @RestController
 @AllArgsConstructor
-public class StaffController {
+public class StaffController extends CommonController {
     private StaffQueryHandler queryHandler;
+    private StaffApplicationService staffApplicationService;
 
     // e.g. http://localhost:8900/staff/S001
     @GetMapping("/{staff_id}")
@@ -34,5 +39,13 @@ public class StaffController {
         } catch (IllegalArgumentException iae) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff ID not found");
         }
+    }
+
+    @PostMapping("/newStaff")
+    @PreAuthorize("hasAuthority('ADMIN')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
+    public HttpStatus addRestaurant(@RequestBody AddNewStaffCommand command)
+            throws StaffDomainException {
+        staffApplicationService.addNewStaff(command);
+        return HttpStatus.CREATED;
     }
 }
