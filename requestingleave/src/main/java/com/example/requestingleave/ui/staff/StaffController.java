@@ -20,6 +20,11 @@ public class StaffController extends CommonController {
     private StaffQueryHandler queryHandler;
     private StaffApplicationService staffApplicationService;
 
+    @GetMapping("/findAll")
+    public Iterable<?> getAllStaffDetails(){
+        return queryHandler.findAllStaff();
+    }
+
     // e.g. http://localhost:8900/staff/S001
     @GetMapping("/{staff_id}")
     public Optional<?> getStaffById(@PathVariable("staff_id") String staffId) {

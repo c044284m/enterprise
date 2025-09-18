@@ -33,7 +33,9 @@ public class StaffJpa {
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
     private List<LeaveEntitlementJpa> leaveEntitlements;
 
-    public StaffJpa() {}
+    public StaffJpa() {
+        this.leaveEntitlements = new ArrayList<>();
+    }
 
     protected StaffJpa(String id,
                              String fullnameFirstname,

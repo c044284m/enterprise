@@ -15,11 +15,8 @@ import java.time.LocalDate;
 public class LeaveEntitlementJpa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @SequenceGenerator(name = "leave_entitlement_sequence",
-            sequenceName = "leave_entitlement_sequence_id",
-            allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "leave_entitlement_sequence")
     private long id;
 
     @Column(name = "remaining_days")

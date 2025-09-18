@@ -15,6 +15,11 @@ import java.util.Optional;
 public class StaffQueryHandler {
     private final StaffRepository staffRepository;
 
+    // Not recommended to have this method - but included here for demo purposes
+    public Iterable<StaffJpa> findAllStaff() {
+        return staffRepository.findAll();
+    }
+
     public Optional<StaffDTO> findStaffById(String staffId) {
         return staffRepository.findById(staffId)
                 .map(StaffMapper::toStaffMemberDTO);

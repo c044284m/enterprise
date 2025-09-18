@@ -5,7 +5,6 @@ VALUES ('S001', 'Alice', 'Johnson', 'alice.johnson@softco.com', 'Engineering'),
 
 INSERT INTO leave_entitlement (remaining_days, valid_from, valid_to, staff_member_id)
 VALUES (15, '2025-01-01', '2025-12-31', 'S001'),
-       (10, '2025-01-01', '2025-12-31', 'S001'),
        (20, '2025-01-01', '2025-12-31', 'S002'),
        (18, '2025-01-01', '2025-12-31', 'S003');
 
