@@ -21,11 +21,13 @@ public class StaffController extends CommonController {
     private StaffApplicationService staffApplicationService;
 
     @GetMapping("/findAll")
+    @PreAuthorize("hasAuthority('ADMIN')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public Iterable<?> getAllStaffDetails(){
         return queryHandler.findAllStaff();
     }
 
     // e.g. http://localhost:8900/staff/S001
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     @GetMapping("/{staff_id}")
     public Optional<?> getStaffById(@PathVariable("staff_id") String staffId) {
         Optional<?> result = queryHandler.findStaffById(staffId);
@@ -38,6 +40,7 @@ public class StaffController extends CommonController {
 
     // e.g. http://localhost:8900/staff/entitlements/S001
     @GetMapping("/entitlements/{staff_id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public List<?> getLeaveEntitlementsForStaff(@PathVariable("staff_id") String staffId) {
         try {
             return queryHandler.findLeaveEntitlementsByStaffId(staffId);

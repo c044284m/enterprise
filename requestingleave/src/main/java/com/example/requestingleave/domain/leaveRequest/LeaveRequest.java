@@ -1,12 +1,10 @@
 package com.example.requestingleave.domain.leaveRequest;
 
-import com.example.common.domain.Entity;
-import com.example.common.domain.FullName;
-import com.example.common.domain.Identity;
-import com.example.common.domain.LeavePeriod;
+import com.example.common.domain.*;
 import com.example.common.events.LeaveRequestCancelledEvent;
 import com.example.common.events.LeaveRequestStartedEvent;
 import com.example.common.events.LeaveRequestApprovedEvent;
+import com.example.requestingleave.domain.staff.LeaveEntitlement;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -133,5 +131,14 @@ public class LeaveRequest extends Entity {
         return leaveDays.stream()
                 .mapToInt(LeaveDay::numberOfDays)
                 .sum();
+    }
+
+    public void applyToEntitlement(LeaveEntitlement entitlement) {
+        Days requested = new Days(this.totalDaysRequested());
+
+        if (!entitlement.remainingDays().isGreaterThanOrEqual(requested)) {
+            throw new IllegalArgumentException("Insufficient leave balance for request");
+        }
+        entitlement.deductDays(requested);
     }
 }

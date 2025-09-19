@@ -7,6 +7,7 @@ import com.example.requestingleave.application.leaveRequest.RequestingLeaveServi
 import com.example.requestingleave.application.leaveRequest.RequestingLeaveDomainException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,12 +20,14 @@ public class LeaveRequestController extends CommonController {
 
     // GET: http://localhost:8900/leaveRequests/findAll
     @GetMapping("/findAll")
+    @PreAuthorize("hasAuthority('ADMIN')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public Iterable<?> getAllLeaveRequests() {
         return queryHandler.findAllLeaveRequests();
     }
 
     // GET: http://localhost:8900/leaveRequests/staff/S001
     @GetMapping("/staff/{staff_id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public Iterable<LeaveRequestDTO> getLeaveRequestsByStaffId(@PathVariable("staff_id") String staffId) {
         return queryHandler.findLeaveRequestsByStaffId(staffId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No leave requests found for that staff ID"));
@@ -32,6 +35,7 @@ public class LeaveRequestController extends CommonController {
 
     // GET: http://localhost:8900/leaveRequests/LR001
     @GetMapping("/{request_id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public LeaveRequestDTO getLeaveRequestById(@PathVariable("request_id") String requestId) {
         return queryHandler.findLeaveRequestById(requestId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Leave request ID not found"));
@@ -51,6 +55,7 @@ public class LeaveRequestController extends CommonController {
      }
      **/
     @PostMapping("/submit")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'USER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public HttpStatus submitLeaveRequest(@RequestBody SubmitLeaveRequestCommand command)
             throws RequestingLeaveDomainException {
         requestingLeaveService.submitLeaveRequest(command);
@@ -63,6 +68,7 @@ public class LeaveRequestController extends CommonController {
      }
      **/
     @PostMapping("/cancel")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'USER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public HttpStatus cancelLeaveRequest(@RequestBody CancelLeaveRequestCommand command)
             throws RequestingLeaveDomainException {
         requestingLeaveService.cancelLeaveRequest(command);
