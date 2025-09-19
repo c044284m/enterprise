@@ -2,8 +2,6 @@ package com.example.requestingleave.application.leaveRequest;
 
 import com.example.common.domain.Identity;
 import com.example.common.domain.UniqueIDFactory;
-import com.example.common.events.LeaveRequestApprovedEvent;
-import com.example.common.events.LeaveRequestCancelledEvent;
 import com.example.requestingleave.application.events.DomainEventManager;
 import com.example.requestingleave.application.staff.LeaveEntitlementMapper;
 import com.example.requestingleave.domain.leaveRequest.LeaveRequest;
@@ -13,8 +11,10 @@ import com.example.requestingleave.infrastructure.leaveRequest.LeaveRequestRepos
 import com.example.requestingleave.infrastructure.staff.LeaveEntitlementJpa;
 import com.example.requestingleave.infrastructure.staff.StaffJpa;
 import com.example.requestingleave.infrastructure.staff.StaffRepository;
-import com.example.requestingleave.ui.leaveRequest.SubmitLeaveRequestCommand;
+import com.example.requestingleave.ui.leaveRequest.ApproveLeaveRequestCommand;
 import com.example.requestingleave.ui.leaveRequest.CancelLeaveRequestCommand;
+import com.example.requestingleave.ui.leaveRequest.RejectLeaveRequestCommand;
+import com.example.requestingleave.ui.leaveRequest.SubmitLeaveRequestCommand;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -39,7 +39,6 @@ public class RequestingLeaveService {
 
             var leaveDays = LeaveDayMapper.toDomain(command.getLeaveDays());
 
-            // Construct aggregate with domain event
             LeaveRequest newRequest = LeaveRequest.createWithEvent(
                     newRequestId,
                     command.getStaffId(),
@@ -57,19 +56,15 @@ public class RequestingLeaveService {
                     .findFirst()
                     .orElseThrow(() -> new RequestingLeaveDomainException("No valid leave entitlement found"));
 
-            // 3. Map to domain and apply deduction
             LeaveEntitlement entitlement = LeaveEntitlementMapper.toDomain(entitlementJpa);
             newRequest.applyToEntitlement(entitlement);
 
-            // 4. Map back and persist updated entitlement
             LeaveEntitlementJpa updatedEntitlementJpa = LeaveEntitlementMapper.toLeaveEntitlementJpa(entitlement, staffJpa);
-            staffJpa.addLeaveEntitlement(updatedEntitlementJpa); // or replace existing
+            staffJpa.addLeaveEntitlement(updatedEntitlementJpa);
             staffRepository.save(staffJpa);
 
-            // 5. Persist leave request
             leaveRequestRepository.save(LeaveRequestMapper.toJpa(newRequest));
 
-            // 6. Notify subscribers
             domainEventManager.manageDomainEvents(this, newRequest.listOfDomainEvents());
 
         } catch (IllegalArgumentException e) {
@@ -85,20 +80,18 @@ public class RequestingLeaveService {
         domainEventManager.manageDomainEvents(this, requestToCancel.listOfDomainEvents());
     }
 
-    @Transactional
-    public void markRequestAsApproved(LeaveRequestApprovedEvent event) throws RequestingLeaveDomainException {
-        LeaveRequest request = findRequestAndConvertToDomain(event.getAggregateID().id());
-        request.markAsApproved(event.getAggregateID());
-        leaveRequestRepository.save(LeaveRequestMapper.toJpa(request));
-        domainEventManager.manageDomainEvents(this, request.listOfDomainEvents());
+    public void markRequestAsApproved(ApproveLeaveRequestCommand command) throws RequestingLeaveDomainException {
+        LeaveRequest markAsApproved = findRequestAndConvertToDomain(command.getRequestId());
+        markAsApproved.markAsApproved();
+        leaveRequestRepository.save(LeaveRequestMapper.toJpa(markAsApproved));
+        domainEventManager.manageDomainEvents(this, markAsApproved.listOfDomainEvents());
     }
 
-    @Transactional
-    public void markRequestAsRejected(LeaveRequestCancelledEvent event) throws RequestingLeaveDomainException {
-        LeaveRequest request = findRequestAndConvertToDomain(event.getAggregateID().id());
-        request.markAsRejected(event.getAggregateID());
-        leaveRequestRepository.save(LeaveRequestMapper.toJpa(request));
-        domainEventManager.manageDomainEvents(this, request.listOfDomainEvents());
+    public void markRequestAsRejected(RejectLeaveRequestCommand command) throws RequestingLeaveDomainException {
+        LeaveRequest markAsRejected = findRequestAndConvertToDomain(command.getRequestId());
+        markAsRejected.markAsRejected();
+        leaveRequestRepository.save(LeaveRequestMapper.toJpa(markAsRejected));
+        domainEventManager.manageDomainEvents(this, markAsRejected.listOfDomainEvents());
     }
 
     private LeaveRequest findRequestAndConvertToDomain(String requestId) throws RequestingLeaveDomainException {

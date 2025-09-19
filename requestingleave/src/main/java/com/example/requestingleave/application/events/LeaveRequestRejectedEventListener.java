@@ -17,6 +17,6 @@ public class LeaveRequestRejectedEventListener {
     @RabbitListener(queues = "${rabbit.queue.leaveRequestRejected}", id = "leaveRequestRejectedListener")
     public void receiveLeaveRequestRejected(LeaveRequestCancelledEvent event) {
         LOG.info("LeaveRequestRejectedEvent received by RequestingLeaveService");
-        requestingLeaveService.markRequestAsRejected(event);
+//        requestingLeaveService.markRequestAsRejected(event);
     }
 }

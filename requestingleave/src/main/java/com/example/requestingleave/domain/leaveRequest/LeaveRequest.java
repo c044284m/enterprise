@@ -64,23 +64,23 @@ public class LeaveRequest extends Entity {
         return request;
     }
 
-    public void markAsApproved(Identity approverAggregateId) {
+    public void markAsApproved() {
         if (leaveStatus != LeaveStatus.Pending) {
             throw new IllegalStateException("Cannot approve a request that is not pending");
         }
         this.leaveStatus = LeaveStatus.Approved;
         this.statusDescription = Leave_Status_Description_Constants.APPROVED;
 
-        LeavePeriod approvedPeriod = leaveDays.get(0).toLeavePeriod();
-        this.addDomainEvent(new LeaveRequestApprovedEvent(
-                approverAggregateId,
-                this.staffMemberID,
-                "Annual", // could be dynamic
-                approvedPeriod
-        ));
+//        LeavePeriod approvedPeriod = leaveDays.get(0).toLeavePeriod();
+//        this.addDomainEvent(new LeaveRequestApprovedEvent(
+//                approverAggregateId,
+//                this.staffMemberID,
+//                "Annual", // could be dynamic
+//                approvedPeriod
+//        ));
     }
 
-    public void markAsRejected(Identity approverAggregateId) {
+    public void markAsRejected() {
         if (leaveStatus != LeaveStatus.Pending) {
             throw new IllegalStateException("Cannot reject a request that is not pending");
         }

@@ -17,6 +17,6 @@ public class LeaveRequestApprovedEventListener {
     @RabbitListener(queues = "${rabbit.queue.leaveRequestApproved}", id = "leaveRequestApprovedListener")
     public void receiveLeaveRequestApproved(LeaveRequestApprovedEvent event) {
         LOG.info("LeaveRequestApprovedEvent received by RequestingLeaveService");
-        requestingLeaveService.markRequestAsApproved(event);
+//        requestingLeaveService.markRequestAsApproved(event);
     }
 }

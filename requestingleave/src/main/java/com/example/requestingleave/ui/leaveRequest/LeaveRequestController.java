@@ -68,10 +68,36 @@ public class LeaveRequestController extends CommonController {
      }
      **/
     @PostMapping("/cancel")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'USER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
+    @PreAuthorize("hasAuthority('USER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public HttpStatus cancelLeaveRequest(@RequestBody CancelLeaveRequestCommand command)
             throws RequestingLeaveDomainException {
         requestingLeaveService.cancelLeaveRequest(command);
+        return HttpStatus.OK;
+    }
+
+    /** POST: http://localhost:8900/leaveRequests/cancel
+     {
+     "requestId": "LR001"
+     }
+     **/
+    @PostMapping("/approve")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public HttpStatus approveLeaveRequest(@RequestBody ApproveLeaveRequestCommand command)
+            throws RequestingLeaveDomainException {
+        requestingLeaveService.markRequestAsApproved(command);
+        return HttpStatus.OK;
+    }
+
+    /** POST: http://localhost:8900/leaveRequests/cancel
+     {
+     "requestId": "LR001"
+     }
+     **/
+    @PostMapping("/reject")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
+    public HttpStatus rejectLeaveRequest(@RequestBody RejectLeaveRequestCommand command)
+            throws RequestingLeaveDomainException {
+        requestingLeaveService.markRequestAsRejected(command);
         return HttpStatus.OK;
     }
 }

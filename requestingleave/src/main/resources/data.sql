@@ -12,7 +12,9 @@ INSERT INTO leave_request (id, staff_member_id, fullname_firstname, fullname_sur
                            leave_status, description_of_status)
 VALUES ('LR001', 'S001', 'Alice', 'Johnson',  '2025-08-20', 0, 'Awaiting manager approval'),
        ('LR002', 'S002', 'Ben', 'Taylor',  '2025-08-22', 1, 'Leave approved'),
-       ('LR003', 'S003', 'Clara', 'Nguyen',  '2025-08-25', 2, 'Leave request rejected');
+       ('LR003', 'S003', 'Clara', 'Nguyen',  '2025-08-25', 2, 'Leave request rejected'),
+       ('LR004', 'S003', 'Clara', 'Nguyen',  '2025-08-27', 0, 'Awaiting manager approval'),
+       ('LR005', 'S001', 'Alice', 'Johnson',  '2025-09-01', 0, 'Awaiting manager approval');
 
 INSERT INTO leave_day (duration_days, start_date, end_date, leave_request_id)
 VALUES
