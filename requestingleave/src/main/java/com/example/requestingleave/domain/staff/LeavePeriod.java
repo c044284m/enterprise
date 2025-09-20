@@ -33,11 +33,4 @@ public class LeavePeriod extends ValueObject {
         return endDate;
     }
 
-    public boolean isActive(LocalDate today) {
-        return !today.isBefore(startDate) && !today.isAfter(endDate);
-    }
-
-    public int numberOfDays() {
-        return (int) (endDate.toEpochDay() - startDate.toEpochDay()) + 1;
-    }
 }
