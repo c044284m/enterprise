@@ -3,7 +3,6 @@ package com.example.requestingleave.domain.leaveRequest;
 import com.example.common.domain.*;
 import com.example.common.events.LeaveRequestCancelledEvent;
 import com.example.common.events.LeaveRequestStartedEvent;
-import com.example.common.events.LeaveRequestApprovedEvent;
 import com.example.requestingleave.domain.staff.LeaveEntitlement;
 
 import java.time.LocalDate;
