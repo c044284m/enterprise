@@ -30,4 +30,11 @@ public class StaffQueryHandler {
                 .map(StaffMapper::convertToLeaveEntitlementDTOs)
                 .orElseThrow(() -> new IllegalArgumentException("Staff ID is not recognised"));
     }
+
+    public List<?> findStaffByDepartment(String departmentName) {
+        if (departmentName == null || departmentName.isBlank()) {
+            throw new IllegalArgumentException("Department name cannot be empty");
+        }
+        return staffRepository.findByDepartmentName(departmentName);
+    }
 }

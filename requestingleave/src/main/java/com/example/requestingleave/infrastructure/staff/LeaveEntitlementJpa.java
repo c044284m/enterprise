@@ -1,5 +1,6 @@
 package com.example.requestingleave.infrastructure.staff;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class LeaveEntitlementJpa {
     private LocalDate validTo;
 
     @ManyToOne
+    @JsonIgnore // Stops circular references
     @JoinColumn(name = "staff_member_id", referencedColumnName = "id")
     private StaffJpa staff;
 

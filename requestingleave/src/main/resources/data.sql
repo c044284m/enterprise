@@ -1,12 +1,14 @@
 INSERT INTO staff_member (id, fullname_firstname, fullname_surname, email_address, department_name)
 VALUES ('S001', 'Alice', 'Johnson', 'alice.johnson@softco.com', 'Engineering'),
        ('S002', 'Ben', 'Taylor', 'ben.taylor@softco.com', 'Product'),
-       ('S003', 'Clara', 'Nguyen', 'clara.nguyen@softco.com', 'Design');
+       ('S003', 'Clara', 'Nguyen', 'clara.nguyen@softco.com', 'Design'),
+       ('S004', 'Richard', 'Somber', 'richard.somber@softco.com', 'Engineering');
 
 INSERT INTO leave_entitlement (remaining_days, valid_from, valid_to, staff_member_id)
 VALUES (15, '2025-01-01', '2025-12-31', 'S001'),
        (20, '2025-01-01', '2025-12-31', 'S002'),
-       (18, '2025-01-01', '2025-12-31', 'S003');
+       (18, '2025-01-01', '2025-12-31', 'S003'),
+       (18, '2025-01-01', '2025-12-31', 'S004');
 
 INSERT INTO leave_request (id, staff_member_id, fullname_firstname, fullname_surname, requested_on,
                            leave_status, description_of_status)

@@ -49,6 +49,17 @@ public class StaffController extends CommonController {
         }
     }
 
+    // e.g. http://localhost:8900/staff/department/Engineering
+    @GetMapping("/department/{departmentName}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public List<?> getStaffByDepartment(@PathVariable("departmentName") String departmentName) {
+        try {
+            return queryHandler.findStaffByDepartment(departmentName);
+        } catch (IllegalArgumentException iae) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid department name");
+        }
+    }
+
     @PostMapping("/newStaff")
     @PreAuthorize("hasAuthority('ADMIN')") //Not hasRole as our role names would need to be stored with ROLE_ADMIN
     public HttpStatus addRestaurant(@RequestBody AddNewStaffCommand command)
