@@ -42,8 +42,9 @@ public class LeaveRequest extends Entity {
         request.leaveStatus = LeaveStatus.Pending;
         request.statusDescription = Leave_Status_Description_Constants.PENDING;
 
-        LeavePeriod period = leaveDays.get(0).toLeavePeriod(); // assuming single-period leave
-        request.addDomainEvent(new LeaveRequestStartedEvent(id, staffId, period));
+        LeavePeriod period = leaveDays.get(0).toLeavePeriod();
+        String occurredOn = requestedOn != null ? requestedOn.toString() : LocalDate.now().toString();
+        request.addDomainEvent(new LeaveRequestStartedEvent(id, staffId, period, occurredOn));
 
         return request;
     }

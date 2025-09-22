@@ -54,9 +54,4 @@ public class LeavePeriod extends ValueObject {
     public int numberOfDays() {
         return (int) (endDate.toEpochDay() - startDate.toEpochDay()) + 1;
     }
-
-    public boolean includes(LocalDate date) {
-        return (date.isEqual(startDate) || date.isAfter(startDate)) &&
-                (date.isEqual(endDate) || date.isBefore(endDate));
-    }
 }

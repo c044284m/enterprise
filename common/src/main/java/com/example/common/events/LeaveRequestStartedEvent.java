@@ -21,7 +21,8 @@ public class LeaveRequestStartedEvent implements RemoteEvent {
     public LeaveRequestStartedEvent(
             @JsonProperty("aggregateID") Identity aggregateID,
             @JsonProperty("staffId") String staffId,
-            @JsonProperty("requestedPeriod") LeavePeriod requestedPeriod
+            @JsonProperty("requestedPeriod") LeavePeriod requestedPeriod,
+            @JsonProperty("occurredOn") String occurredOn
     ) {
         this.aggregateID = aggregateID;
         this.staffId = staffId;

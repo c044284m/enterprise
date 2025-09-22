@@ -48,4 +48,16 @@ public class LeaveEntitlement extends Entity {
         }
         this.remainingDays = remainingDays.subtract(daysTaken);
     }
+
+    @Override
+    public int hashCode() {
+        return leaveType.hashCode() + validPeriod.hashCode();
+    }
+
+    public static LeaveEntitlement entitlementOf(Identity id,
+                                                 String leaveType,
+                                                 Days remainingDays,
+                                                 LeavePeriod validPeriod) {
+        return new LeaveEntitlement(id, leaveType, remainingDays.asInt(), validPeriod);
+    }
 }

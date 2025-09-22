@@ -58,14 +58,6 @@ public class Days extends ValueObject {
         return this.value;
     }
 
-    public String asString() {
-        return String.valueOf(this.value);
-    }
-
-    public Days multiply(int x) {
-        return new Days(this.value * x);
-    }
-
     private void assertValueIsGreaterThan(int value, int threshold, String message) {
         if (value <= threshold) {
             throw new IllegalArgumentException(message);

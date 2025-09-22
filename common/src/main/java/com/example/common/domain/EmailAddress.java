@@ -34,4 +34,8 @@ public class EmailAddress extends ValueObject {
     public String value() {
         return this.value;
     }
+
+    public String asString() {
+        return value;
+    }
 }

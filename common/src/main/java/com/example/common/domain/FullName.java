@@ -24,14 +24,10 @@ public class FullName extends ValueObject {
         this(fullName.firstName, fullName.surname);
     }
 
-    public boolean equals(Object o){
-        if (o == null && o.getClass() != this.getClass()){
-            return false;
-        }
-        FullName fullName = (FullName) o;
-
-        return fullName.firstName.equals(this.firstName) &&
-                fullName.surname.equals(this.surname);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FullName other)) return false;
+        return firstName.equals(other.firstName) && surname.equals(other.surname);
     }
 
     private void setFirstName(String firstName){

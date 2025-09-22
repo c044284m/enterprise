@@ -44,8 +44,8 @@ public class Staff extends Entity {
         // Only passing id and name as an event (at the moment)
         newStaff.addDomainEvent(new StaffAddedEvent(
                 newStaff.id().id(),
-                fullName.toString(),
-                emailAddress.toString(),
+                emailAddress.asString(),
+                fullName.firstName() + " " + fullName.surname(),
                 department.name()
         ));
 
